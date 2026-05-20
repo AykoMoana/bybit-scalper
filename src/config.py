@@ -19,13 +19,12 @@ class Config:
     """Bot configuration."""
 
     # API
-    bybit_api_key: str = ""
-    bybit_api_secret: str = ""
+    mexc_api_key: str = ""
+    mexc_api_secret: str = ""
 
     # Trading
     symbol: str = "BSBUSDT"
-    category: str = "spot"
-    leverage: int = 1
+    exchange: str = "mexc"
 
     # Strategy
     spread_threshold: float = 0.001
@@ -36,8 +35,7 @@ class Config:
     max_open_positions: int = 3
 
     # Order
-    order_type: str = "Limit"
-    post_only: bool = True
+    order_type: str = "LIMIT"
     time_in_force: str = "GTC"
 
     # Risk
@@ -54,16 +52,16 @@ class Config:
     log_file: str = "logs/scalper.log"
 
     # Mode
-    dry_run: bool = True  # Default to dry run for safety
+    dry_run: bool = True
 
     def validate(self) -> list[str]:
         """Validate config, return list of errors."""
         errors = []
         if not self.dry_run:
-            if not self.bybit_api_key:
-                errors.append("BYBIT_API_KEY required for live trading")
-            if not self.bybit_api_secret:
-                errors.append("BYBIT_API_SECRET required for live trading")
+            if not self.mexc_api_key:
+                errors.append("MEXC_API_KEY required for live trading")
+            if not self.mexc_api_secret:
+                errors.append("MEXC_API_SECRET required for live trading")
         if self.take_profit_pct <= 0:
             errors.append("TAKE_PROFIT_PCT must be positive")
         if self.stop_loss_pct <= 0:
@@ -75,7 +73,6 @@ class Config:
 
 def load_config(env_path: str = "config/.env", dry_run: bool = True) -> Config:
     """Load configuration from .env file."""
-    # Load .env
     if os.path.exists(env_path):
         load_dotenv(env_path)
         logger.info(f"Loaded config from {env_path}")
@@ -83,19 +80,17 @@ def load_config(env_path: str = "config/.env", dry_run: bool = True) -> Config:
         logger.warning(f"Config file not found: {env_path}, using defaults")
 
     config = Config(
-        bybit_api_key=os.getenv("BYBIT_API_KEY", ""),
-        bybit_api_secret=os.getenv("BYBIT_API_SECRET", ""),
+        mexc_api_key=os.getenv("MEXC_API_KEY", ""),
+        mexc_api_secret=os.getenv("MEXC_API_SECRET", ""),
         symbol=os.getenv("SYMBOL", "BSBUSDT"),
-        category=os.getenv("CATEGORY", "spot"),
-        leverage=int(os.getenv("LEVERAGE", "1")),
+        exchange=os.getenv("EXCHANGE", "mexc"),
         spread_threshold=float(os.getenv("SPREAD_THRESHOLD", "0.001")),
         take_profit_pct=float(os.getenv("TAKE_PROFIT_PCT", "0.008")),
         stop_loss_pct=float(os.getenv("STOP_LOSS_PCT", "0.005")),
         max_position_usdt=float(os.getenv("MAX_POSITION_USDT", "50")),
         max_daily_loss_usdt=float(os.getenv("MAX_DAILY_LOSS_USDT", "100")),
         max_open_positions=int(os.getenv("MAX_OPEN_POSITIONS", "3")),
-        order_type=os.getenv("ORDER_TYPE", "Limit"),
-        post_only=os.getenv("POST_ONLY", "true").lower() == "true",
+        order_type=os.getenv("ORDER_TYPE", "LIMIT"),
         time_in_force=os.getenv("TIME_IN_FORCE", "GTC"),
         trailing_stop=os.getenv("TRAILING_STOP", "true").lower() == "true",
         trailing_stop_pct=float(os.getenv("TRAILING_STOP_PCT", "0.003")),

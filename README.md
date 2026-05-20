@@ -1,6 +1,6 @@
-# 🚀 Bybit Scalper — BSB/USDT
+# 🚀 MEXC Scalper — BSB/USDT
 
-High-frequency scalping bot for Bybit Spot trading.
+High-frequency scalping bot for MEXC Spot trading.
 
 ## Strategy
 
@@ -26,7 +26,8 @@ bybit-scalper/
 ├── src/
 │   ├── __init__.py
 │   ├── main.py        # Entry point + main loop
-│   ├── bybit_client.py   # REST + WebSocket API
+│   ├── mexc_client.py # MEXC REST + WebSocket API
+│   ├── bybit_client.py # Bybit client (legacy)
 │   ├── strategy.py    # Scalping strategy engine
 │   ├── risk.py        # Risk management
 │   ├── notifier.py    # Telegram alerts
@@ -49,12 +50,12 @@ pip install -r requirements.txt
 
 ```bash
 cp config/.env.example config/.env
-# Edit config/.env with your Bybit API keys
+# Edit config/.env with your MEXC API keys
 ```
 
-### 3. Get Bybit API Keys
+### 3. Get MEXC API Keys
 
-1. Go to [Bybit API Management](https://www.bybit.com/app/user/api-management)
+1. Go to [MEXC API Management](https://www.mexc.com/user/openapi)
 2. Create new API key
 3. Enable **Spot Trading** permission
 4. Add your server IP to whitelist
@@ -84,8 +85,8 @@ python -m src.main --config /path/to/.env
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `BYBIT_API_KEY` | — | Your Bybit API key |
-| `BYBIT_API_SECRET` | — | Your Bybit API secret |
+| `MEXC_API_KEY` | — | Your MEXC API key |
+| `MEXC_API_SECRET` | — | Your MEXC API secret |
 | `SYMBOL` | BSBUSDT | Trading pair |
 | `SPREAD_THRESHOLD` | 0.001 | Min spread to enter (0.1%) |
 | `TAKE_PROFIT_PCT` | 0.008 | Take profit (0.8%) |
@@ -117,7 +118,7 @@ You'll get notifications for:
 - **Max drawdown**: 5% max drawdown from peak
 - **Max hold time**: 5 minutes per scalp
 - **Breakeven**: Auto-move SL after 0.4% profit
-- **Post-only orders**: Maker fees only (0.1%)
+- **Maker orders**: Limit orders for lower fees
 
 ## Safety Features
 
