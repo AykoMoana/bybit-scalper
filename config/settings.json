@@ -1,0 +1,13 @@
+{
+  "name": "bybit-scalper",
+  "version": "1.0.0",
+  "description": "BSB/USDT scalping bot for Bybit",
+  "main": "src/main.py",
+  "scripts": {
+    "start": "python -m src.main",
+    "dry-run": "python -m src.main --dry-run",
+    "backtest": "python -m src.backtest"
+  },
+  "author": "Migi",
+  "license": "MIT"
+}
